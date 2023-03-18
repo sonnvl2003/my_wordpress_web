@@ -544,7 +544,7 @@ function jobscout_footer_bottom(){ ?>
                 jobscout_get_footer_copyright();
                 jobscout_ed_author_link();
                 jobscout_ed_wp_link();
-            ?>               
+            ?>
             </div>
 		</div>
 	</div>
@@ -569,7 +569,7 @@ if( ! function_exists( 'jobscout_page_end' ) ) :
  * Page End
 */
 function jobscout_page_end(){ ?>
-    </div><!-- #acc-content -->
+    </html><!-- #acc-content -->
     </div><!-- #page -->
     <?php
 }
