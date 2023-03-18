@@ -569,7 +569,7 @@ if( ! function_exists( 'jobscout_page_end' ) ) :
  * Page End
 */
 function jobscout_page_end(){ ?>
-    </div><!-- #acc-content -->
+    </html><!-- #acc-content -->
     </div><!-- #page -->
     <?php
 }
