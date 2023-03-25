@@ -10,7 +10,6 @@
 require_once __DIR__ . '/admin.php';
 require_once __DIR__ . '/includes/credits.php';
 
-// Used in the HTML title tag.
 $title = __( 'Credits' );
 
 list( $display_version ) = explode( '-', get_bloginfo( 'version' ) );
@@ -29,13 +28,7 @@ $credits = wp_credits();
 		</div>
 
 		<div class="about__header-text">
-			<?php
-			printf(
-				/* translators: %s: Version number. */
-				__( 'WordPress %s was created by a worldwide team of passionate individuals' ),
-				$display_version
-			);
-			?>
+			<?php _e( 'WordPress 5.8 was created by a worldwide team of passionate individuals' ); ?>
 		</div>
 
 		<nav class="about__header-navigation nav-tab-wrapper wp-clearfix" aria-label="<?php esc_attr_e( 'Secondary menu' ); ?>">
@@ -46,7 +39,7 @@ $credits = wp_credits();
 		</nav>
 	</div>
 
-	<div class="about__section has-1-column has-gutters">
+	<div class="about__section has-1-column">
 		<div class="column aligncenter">
 			<?php if ( ! $credits ) : ?>
 
@@ -82,7 +75,7 @@ if ( ! $credits ) {
 }
 ?>
 
-	<hr class="is-large" />
+	<hr />
 
 	<div class="about__section">
 		<div class="column is-edge-to-edge">

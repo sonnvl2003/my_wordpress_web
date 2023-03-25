@@ -41,12 +41,6 @@
  * These variables do not appear to be used anywhere else.
  */
 /**
-*  Converts a hex value into the rgb equivalent.
-*
-* @param {string} hex - the hexadecimal value to convert
-* @return {string} comma separated rgb values
-*/
-/**
  * Breakpoint mixins
  */
 /**
@@ -103,6 +97,10 @@
   z-index: 159990;
 }
 
+.block-library-video-tracks-editor > .components-popover__content {
+  width: 360px;
+}
+
 .block-library-video-tracks-editor__track-list-track {
   display: flex;
   place-content: space-between;
@@ -141,8 +139,7 @@
   display: block;
 }
 
-.block-library-video-tracks-editor > .components-popover__content {
-  width: 360px;
+.block-library-video-tracks-editor > .components-popover__content > div {
   padding: 0;
 }
 

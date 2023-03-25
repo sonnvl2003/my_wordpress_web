@@ -14,7 +14,6 @@
  *
  * @since 5.5.0
  */
-#[AllowDynamicProperties]
 abstract class WP_Sitemaps_Provider {
 	/**
 	 * Provider name.
@@ -43,7 +42,7 @@ abstract class WP_Sitemaps_Provider {
 	 *
 	 * @param int    $page_num       Page of results.
 	 * @param string $object_subtype Optional. Object subtype name. Default empty.
-	 * @return array[] Array of URL information for a sitemap.
+	 * @return array Array of URLs for a sitemap.
 	 */
 	abstract public function get_url_list( $page_num, $object_subtype = '' );
 
@@ -161,7 +160,7 @@ abstract class WP_Sitemaps_Provider {
 		);
 
 		if ( ! $wp_rewrite->using_permalinks() ) {
-			$basename = '/?' . http_build_query( $params, '', '&' );
+			$basename = '/?' . http_build_query( $params, null, '&' );
 		}
 
 		return home_url( $basename );

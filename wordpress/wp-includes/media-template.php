@@ -8,7 +8,7 @@
  */
 
 /**
- * Outputs the markup for a audio tag to be used in an Underscore template
+ * Output the markup for a audio tag to be used in an Underscore template
  * when data.model is passed.
  *
  * @since 3.9.0
@@ -28,7 +28,7 @@ function wp_underscore_audio_template() {
 	if ( ! _.isUndefined( data.model.<?php echo $attr; ?> ) && data.model.<?php echo $attr; ?> ) {
 		#> <?php echo $attr; ?><#
 	}
-	<?php endforeach; ?>#>
+	<?php endforeach ?>#>
 >
 	<# if ( ! _.isEmpty( data.model.src ) ) { #>
 	<source src="{{ data.model.src }}" type="{{ wp.media.view.settings.embedMimes[ data.model.src.split('.').pop() ] }}" />
@@ -48,7 +48,7 @@ function wp_underscore_audio_template() {
 }
 
 /**
- * Outputs the markup for a video tag to be used in an Underscore template
+ * Output the markup for a video tag to be used in an Underscore template
  * when data.model is passed.
  *
  * @since 3.9.0
@@ -123,7 +123,7 @@ function wp_underscore_video_template() {
 	if ( ! _.isUndefined( data.model.<?php echo $attr; ?> ) && data.model.<?php echo $attr; ?> ) {
 		#> <?php echo $attr; ?><#
 	}
-	<?php endforeach; ?>#>
+	<?php endforeach ?>#>
 >
 	<# if ( ! _.isEmpty( data.model.src ) ) {
 		if ( isYouTube ) { #>
@@ -158,7 +158,7 @@ function wp_print_media_templates() {
 
 	$alt_text_description = sprintf(
 		/* translators: 1: Link to tutorial, 2: Additional link attributes, 3: Accessibility text. */
-		__( '<a href="%1$s" %2$s>Learn how to describe the purpose of the image%3$s</a>. Leave empty if the image is purely decorative.' ),
+		__( '<a href="%1$s" %2$s>Describe the purpose of the image%3$s</a>. Leave empty if the image is purely decorative.' ),
 		esc_url( 'https://www.w3.org/WAI/tutorials/images/decision-tree' ),
 		'target="_blank" rel="noopener"',
 		sprintf(
@@ -320,6 +320,7 @@ function wp_print_media_templates() {
 	<?php // Template for the uploading status UI. ?>
 	<script type="text/html" id="tmpl-uploader-status">
 		<h2><?php _e( 'Uploading' ); ?></h2>
+		<button type="button" class="button-link upload-dismiss-errors"><span class="screen-reader-text"><?php _e( 'Dismiss Errors' ); ?></span></button>
 
 		<div class="media-progress-bar"><div></div></div>
 		<div class="upload-details">
@@ -330,7 +331,6 @@ function wp_print_media_templates() {
 			<span class="upload-filename"></span>
 		</div>
 		<div class="upload-errors"></div>
-		<button type="button" class="button upload-dismiss-errors"><?php _e( 'Dismiss errors' ); ?></button>
 	</script>
 
 	<?php // Template for the uploading status errors. ?>
@@ -438,10 +438,8 @@ function wp_print_media_templates() {
 					<# } #>
 
 					<# if ( data.originalImageURL && data.originalImageName ) { #>
-						<div class="word-wrap-break-word">
-							<?php _e( 'Original image:' ); ?>
-							<a href="{{ data.originalImageURL }}">{{data.originalImageName}}</a>
-						</div>
+						<?php _e( 'Original image:' ); ?>
+						<a href="{{ data.originalImageURL }}">{{data.originalImageName}}</a>
 					<# } #>
 				<# } #>
 
@@ -475,9 +473,9 @@ function wp_print_media_templates() {
 			<div class="settings">
 				<# var maybeReadOnly = data.can.save || data.allowLocalEdits ? '' : 'readonly'; #>
 				<# if ( 'image' === data.type ) { #>
-					<span class="setting alt-text has-description" data-setting="alt">
+					<span class="setting has-description" data-setting="alt">
 						<label for="attachment-details-two-column-alt-text" class="name"><?php _e( 'Alternative Text' ); ?></label>
-						<textarea id="attachment-details-two-column-alt-text" aria-describedby="alt-text-description" {{ maybeReadOnly }}>{{ data.alt }}</textarea>
+						<input type="text" id="attachment-details-two-column-alt-text" value="{{ data.alt }}" aria-describedby="alt-text-description" {{ maybeReadOnly }} />
 					</span>
 					<p class="description" id="alt-text-description"><?php echo $alt_text_description; ?></p>
 				<# } #>
@@ -663,10 +661,8 @@ function wp_print_media_templates() {
 					<# } #>
 
 					<# if ( data.originalImageURL && data.originalImageName ) { #>
-						<div class="word-wrap-break-word">
-							<?php _e( 'Original image:' ); ?>
-							<a href="{{ data.originalImageURL }}">{{data.originalImageName}}</a>
-						</div>
+						<?php _e( 'Original image:' ); ?>
+						<a href="{{ data.originalImageURL }}">{{data.originalImageName}}</a>
 					<# } #>
 
 					<# if ( data.can.save && data.sizes ) { #>
@@ -706,9 +702,9 @@ function wp_print_media_templates() {
 		</div>
 		<# var maybeReadOnly = data.can.save || data.allowLocalEdits ? '' : 'readonly'; #>
 		<# if ( 'image' === data.type ) { #>
-			<span class="setting alt-text has-description" data-setting="alt">
+			<span class="setting has-description" data-setting="alt">
 				<label for="attachment-details-alt-text" class="name"><?php _e( 'Alt Text' ); ?></label>
-				<textarea id="attachment-details-alt-text" aria-describedby="alt-text-description" {{ maybeReadOnly }}>{{ data.alt }}</textarea>
+				<input type="text" id="attachment-details-alt-text" value="{{ data.alt }}" aria-describedby="alt-text-description" {{ maybeReadOnly }} />
 			</span>
 			<p class="description" id="alt-text-description"><?php echo $alt_text_description; ?></p>
 		<# } #>
@@ -1014,7 +1010,7 @@ function wp_print_media_templates() {
 
 		<span class="setting alt-text has-description">
 			<label for="embed-image-settings-alt-text" class="name"><?php _e( 'Alternative Text' ); ?></label>
-			<textarea id="embed-image-settings-alt-text" data-setting="alt" aria-describedby="alt-text-description"></textarea>
+			<input type="text" id="embed-image-settings-alt-text" data-setting="alt" aria-describedby="alt-text-description" />
 		</span>
 		<p class="description" id="alt-text-description"><?php echo $alt_text_description; ?></p>
 
@@ -1077,7 +1073,7 @@ function wp_print_media_templates() {
 				<div class="column-settings">
 					<span class="setting alt-text has-description">
 						<label for="image-details-alt-text" class="name"><?php _e( 'Alternative Text' ); ?></label>
-						<textarea id="image-details-alt-text" data-setting="alt" aria-describedby="alt-text-description">{{ data.model.alt }}</textarea>
+						<input type="text" id="image-details-alt-text" data-setting="alt" value="{{ data.model.alt }}" aria-describedby="alt-text-description" />
 					</span>
 					<p class="description" id="alt-text-description"><?php echo $alt_text_description; ?></p>
 
@@ -1281,7 +1277,7 @@ function wp_print_media_templates() {
 					<button type="button" class="button-link remove-setting"><?php _e( 'Remove audio source' ); ?></button>
 				</span>
 				<# } #>
-				<?php endforeach; ?>
+				<?php endforeach ?>
 
 				<# if ( ! _.isEmpty( html5types ) ) { #>
 				<fieldset class="setting-group">
@@ -1371,7 +1367,7 @@ function wp_print_media_templates() {
 					<button type="button" class="button-link remove-setting"><?php _e( 'Remove video source' ); ?></button>
 				</span>
 				<# } #>
-				<?php endforeach; ?>
+				<?php endforeach ?>
 				</div>
 
 				<# if ( ! _.isEmpty( html5types ) ) { #>
@@ -1438,7 +1434,7 @@ function wp_print_media_templates() {
 							);
 						?>
 						</span>
-						<button type="button" class="button-link remove-setting remove-track"><?php _ex( 'Remove video track', 'media' ); ?></button><br />
+						<button type="button" class="button-link remove-setting remove-track"><?php _ex( 'Remove video track', 'media' ); ?></button><br/>
 						<# } ); #>
 					<# } else { #>
 					<span class="name"><?php _e( 'Tracks (subtitles, captions, descriptions, chapters, or metadata)' ); ?></span><br />
@@ -1470,7 +1466,7 @@ function wp_print_media_templates() {
 						<# } #>
 					</dl>
 					<# if ( index % data.columns === data.columns - 1 ) { #>
-						<br style="clear: both;" />
+						<br style="clear: both;">
 					<# } #>
 				<# } ); #>
 			</div>
@@ -1483,7 +1479,7 @@ function wp_print_media_templates() {
 
 	<?php // Template for the Crop area layout, used for example in the Customizer. ?>
 	<script type="text/html" id="tmpl-crop-content">
-		<img class="crop-image" src="{{ data.url }}" alt="<?php esc_attr_e( 'Image crop area preview. Requires mouse interaction.' ); ?>" />
+		<img class="crop-image" src="{{ data.url }}" alt="<?php esc_attr_e( 'Image crop area preview. Requires mouse interaction.' ); ?>">
 		<div class="upload-errors"></div>
 	</script>
 
@@ -1497,7 +1493,7 @@ function wp_print_media_templates() {
 			<div class="favicon">
 				<img id="preview-favicon" src="{{ data.url }}" alt="<?php esc_attr_e( 'Preview as a browser icon' ); ?>" />
 			</div>
-			<span class="browser-title" aria-hidden="true"><# print( '<?php echo esc_js( get_bloginfo( 'name' ) ); ?>' ) #></span>
+			<span class="browser-title" aria-hidden="true"><# print( '<?php bloginfo( 'name' ); ?>' ) #></span>
 		</div>
 
 		<strong aria-hidden="true"><?php _e( 'As an app icon' ); ?></strong>

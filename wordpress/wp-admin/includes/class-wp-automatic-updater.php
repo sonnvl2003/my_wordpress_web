@@ -13,7 +13,6 @@
  * @since 3.7.0
  * @since 4.6.0 Moved to its own file from wp-admin/includes/class-wp-upgrader.php.
  */
-#[AllowDynamicProperties]
 class WP_Automatic_Updater {
 
 	/**
@@ -24,7 +23,7 @@ class WP_Automatic_Updater {
 	protected $update_results = array();
 
 	/**
-	 * Determines whether the entire automatic updater is disabled.
+	 * Whether the entire automatic updater is disabled.
 	 *
 	 * @since 3.7.0
 	 */
@@ -57,7 +56,7 @@ class WP_Automatic_Updater {
 	}
 
 	/**
-	 * Checks for version control checkouts.
+	 * Check for version control checkouts.
 	 *
 	 * Checks for Subversion, Git, Mercurial, and Bazaar. It recursively looks up the
 	 * filesystem to the top of the drive, erring on the side of detecting a VCS
@@ -194,10 +193,9 @@ class WP_Automatic_Updater {
 		 *  - `auto_update_theme`
 		 *  - `auto_update_translation`
 		 *
-		 * Since WordPress 3.7, minor and development versions of core, and translations have
-		 * been auto-updated by default. New installs on WordPress 5.6 or higher will also
-		 * auto-update major versions by default. Starting in 5.6, older sites can opt-in to
-		 * major version auto-updates, and auto-updates for plugins and themes.
+		 * Generally speaking, plugins, themes, and major core versions are not updated
+		 * by default, while translations and minor and development versions for core
+		 * are updated by default.
 		 *
 		 * See the {@see 'allow_dev_auto_core_updates'}, {@see 'allow_minor_auto_core_updates'},
 		 * and {@see 'allow_major_auto_core_updates'} filters for a more straightforward way to
@@ -223,7 +221,7 @@ class WP_Automatic_Updater {
 		if ( 'core' === $type ) {
 			global $wpdb;
 
-			$php_compat = version_compare( PHP_VERSION, $item->php_version, '>=' );
+			$php_compat = version_compare( phpversion(), $item->php_version, '>=' );
 			if ( file_exists( WP_CONTENT_DIR . '/db.php' ) && empty( $wpdb->is_mysql ) ) {
 				$mysql_compat = true;
 			} else {
@@ -237,7 +235,7 @@ class WP_Automatic_Updater {
 
 		// If updating a plugin or theme, ensure the minimum PHP version requirements are satisfied.
 		if ( in_array( $type, array( 'plugin', 'theme' ), true ) ) {
-			if ( ! empty( $item->requires_php ) && version_compare( PHP_VERSION, $item->requires_php, '<' ) ) {
+			if ( ! empty( $item->requires_php ) && version_compare( phpversion(), $item->requires_php, '<' ) ) {
 				return false;
 			}
 		}
@@ -296,7 +294,7 @@ class WP_Automatic_Updater {
 	}
 
 	/**
-	 * Updates an item, if appropriate.
+	 * Update an item, if appropriate.
 	 *
 	 * @since 3.7.0
 	 *
@@ -420,10 +418,9 @@ class WP_Automatic_Updater {
 				return false;
 			}
 
-			// Core doesn't output this, so let's append it, so we don't get confused.
+			// Core doesn't output this, so let's append it so we don't get confused.
 			if ( is_wp_error( $upgrade_result ) ) {
-				$upgrade_result->add( 'installation_failed', __( 'Installation failed.' ) );
-				$skin->error( $upgrade_result );
+				$skin->error( __( 'Installation failed.' ), $upgrade_result );
 			} else {
 				$skin->feedback( __( 'WordPress updated successfully.' ) );
 			}
@@ -779,7 +776,7 @@ class WP_Automatic_Updater {
 				// Don't show this message if there is a newer version available.
 				// Potential for confusion, and also not useful for them to know at this point.
 				if ( 'fail' === $type && ! $newer_version_available ) {
-					$body .= __( 'An attempt was made, but your site could not be updated automatically.' ) . ' ';
+					$body .= __( 'We tried but were unable to update your site automatically.' ) . ' ';
 				}
 
 				$body .= __( 'Updating is easy and only takes a few moments:' );
@@ -830,7 +827,7 @@ class WP_Automatic_Updater {
 		}
 
 		if ( $critical_support ) {
-			$body .= ' ' . __( "Reach out to WordPress Core developers to ensure you'll never have this problem again." );
+			$body .= ' ' . __( "If you reach out to us, we'll also ensure you'll never have this problem again." );
 		}
 
 		// If things are successful and we're now on the latest, mention plugins and themes if any are out of date.
@@ -845,7 +842,7 @@ class WP_Automatic_Updater {
 			$body .= "\n***\n\n";
 			/* translators: %s: WordPress version. */
 			$body .= sprintf( __( 'Your site was running version %s.' ), get_bloginfo( 'version' ) );
-			$body .= ' ' . __( 'Some data that describes the error your site encountered has been put together.' );
+			$body .= ' ' . __( 'We have some data that describes the error your site encountered.' );
 			$body .= ' ' . __( 'Your hosting company, support forum volunteers, or a friendly developer may be able to use this information to help you:' );
 
 			// If we had a rollback and we're still critical, then the rollback failed too.
@@ -1101,33 +1098,22 @@ class WP_Automatic_Updater {
 				$body[] = __( 'These plugins failed to update:' );
 
 				foreach ( $failed_updates['plugin'] as $item ) {
-					$body_message = '';
-					$item_url     = '';
-
-					if ( ! empty( $item->item->url ) ) {
-						$item_url = ' : ' . esc_url( $item->item->url );
-					}
-
 					if ( $item->item->current_version ) {
-						$body_message .= sprintf(
-							/* translators: 1: Plugin name, 2: Current version number, 3: New version number, 4: Plugin URL. */
-							__( '- %1$s (from version %2$s to %3$s)%4$s' ),
+						$body[] = sprintf(
+							/* translators: 1: Plugin name, 2: Current version number, 3: New version number. */
+							__( '- %1$s (from version %2$s to %3$s)' ),
 							$item->name,
 							$item->item->current_version,
-							$item->item->new_version,
-							$item_url
+							$item->item->new_version
 						);
 					} else {
-						$body_message .= sprintf(
-							/* translators: 1: Plugin name, 2: Version number, 3: Plugin URL. */
-							__( '- %1$s version %2$s%3$s' ),
+						$body[] = sprintf(
+							/* translators: 1: Plugin name, 2: Version number. */
+							__( '- %1$s version %2$s' ),
 							$item->name,
-							$item->item->new_version,
-							$item_url
+							$item->item->new_version
 						);
 					}
-
-					$body[] = $body_message;
 
 					$past_failure_emails[ $item->item->plugin ] = $item->item->new_version;
 				}
@@ -1173,32 +1159,22 @@ class WP_Automatic_Updater {
 				$body[] = __( 'These plugins are now up to date:' );
 
 				foreach ( $successful_updates['plugin'] as $item ) {
-					$body_message = '';
-					$item_url     = '';
-
-					if ( ! empty( $item->item->url ) ) {
-						$item_url = ' : ' . esc_url( $item->item->url );
-					}
-
 					if ( $item->item->current_version ) {
-						$body_message .= sprintf(
-							/* translators: 1: Plugin name, 2: Current version number, 3: New version number, 4: Plugin URL. */
-							__( '- %1$s (from version %2$s to %3$s)%4$s' ),
+						$body[] = sprintf(
+							/* translators: 1: Plugin name, 2: Current version number, 3: New version number. */
+							__( '- %1$s (from version %2$s to %3$s)' ),
 							$item->name,
 							$item->item->current_version,
-							$item->item->new_version,
-							$item_url
+							$item->item->new_version
 						);
 					} else {
-						$body_message .= sprintf(
-							/* translators: 1: Plugin name, 2: Version number, 3: Plugin URL. */
-							__( '- %1$s version %2$s%3$s' ),
+						$body[] = sprintf(
+							/* translators: 1: Plugin name, 2: Version number. */
+							__( '- %1$s version %2$s' ),
 							$item->name,
-							$item->item->new_version,
-							$item_url
+							$item->item->new_version
 						);
 					}
-					$body[] = $body_message;
 
 					unset( $past_failure_emails[ $item->item->plugin ] );
 				}
@@ -1258,15 +1234,9 @@ class WP_Automatic_Updater {
 		$body[] = __( 'https://wordpress.org/support/forums/' );
 		$body[] = "\n" . __( 'The WordPress Team' );
 
-		if ( '' !== get_option( 'blogname' ) ) {
-			$site_title = wp_specialchars_decode( get_option( 'blogname' ), ENT_QUOTES );
-		} else {
-			$site_title = parse_url( home_url(), PHP_URL_HOST );
-		}
-
 		$body    = implode( "\n", $body );
 		$to      = get_site_option( 'admin_email' );
-		$subject = sprintf( $subject, $site_title );
+		$subject = sprintf( $subject, wp_specialchars_decode( get_option( 'blogname' ), ENT_QUOTES ) );
 		$headers = '';
 
 		$email = compact( 'to', 'subject', 'body', 'headers' );
@@ -1375,11 +1345,7 @@ class WP_Automatic_Updater {
 			$body[] = '';
 		}
 
-		if ( '' !== get_bloginfo( 'name' ) ) {
-			$site_title = wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES );
-		} else {
-			$site_title = parse_url( home_url(), PHP_URL_HOST );
-		}
+		$site_title = wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES );
 
 		if ( $failures ) {
 			$body[] = trim(
