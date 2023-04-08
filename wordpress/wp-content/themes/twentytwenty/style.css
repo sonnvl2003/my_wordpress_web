@@ -1,8 +1,8 @@
 /*
 Theme Name: Twenty Twenty
 Text Domain: twentytwenty
-Version: 2.1
-Tested up to: 6.1
+Version: 2.2
+Tested up to: 6.2
 Requires at least: 4.7
 Requires PHP: 5.2.4
 Description: Our default theme for 2020 is designed to take full advantage of the flexibility of the block editor. Organizations and businesses have the ability to create dynamic landing pages with endless layouts using the group and column blocks. The centered content column and fine-tuned typography also makes it perfect for traditional blogs. Complete editor styles give you a good idea of what your content will look like, even before you publish. You can give your site a personal touch by changing the background colors and the accent color in the Customizer. The colors of all elements on your site are automatically calculated based on the colors you pick, ensuring a high, accessible color contrast for your visitors.
@@ -54,7 +54,7 @@ with others.
 /*	0. CSS Reset
 /* -------------------------------------------------------------------------- */
 
-@import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
+
 html,
 body {
 	border: none;
@@ -3261,6 +3261,12 @@ figure.wp-block-gallery.alignfull {
 	margin-top: 1.2rem;
 }
 
+.wp-block-pullquote.has-text-color cite,
+.wp-block-pullquote.has-background cite,
+.has-background .wp-block-pullquote cite {
+	color: inherit;
+}
+
 .wp-block-pullquote.alignleft p,
 .wp-block-pullquote.alignright p {
 	font-size: 2.8rem;
@@ -3377,6 +3383,12 @@ figure.wp-block-table.is-style-stripes {
 .wp-block-quote p,
 .wp-block-quote cite {
 	text-align: inherit;
+}
+
+.wp-block-quote.has-text-color cite,
+.wp-block-quote.has-background cite,
+.has-background .wp-block-quote cite {
+	color: inherit;
 }
 
 .wp-block-quote[style="text-align:center"] {
@@ -6496,80 +6508,5 @@ a.to-the-top > * {
 	.wp-block-pullquote.is-style-solid-color.alignleft::before,
 	.wp-block-pullquote.is-style-solid-color.alignright::before {
 		top: 0;
-	}
-}
-
-/* Footer */
-section {
-	padding: 60px 0;
-}
-
-section .section-title {
-	text-align: center;
-	color: #007b5e;
-	margin-bottom: 50px;
-	text-transform: uppercase;
-}
-#footer {
-	background: #007b5e !important;
-}
-#footer h5{
-	padding-left: 10px;
-	border-left: 3px solid #eeeeee;
-	padding-bottom: 6px;
-	margin-bottom: 20px;
-	color:#ffffff;
-}
-#footer a {
-	color: #ffffff;
-	text-decoration: none !important;
-	background-color: transparent;
-	-webkit-text-decoration-skip: objects;
-}
-#footer ul.social li{
-	padding: 3px 0;
-}
-#footer ul.social li a i {
-	margin-right: 5px;
-	font-size:25px;
-	-webkit-transition: .5s all ease;
-	-moz-transition: .5s all ease;
-	transition: .5s all ease;
-}
-#footer ul.social li:hover a i {
-	font-size:30px;
-	margin-top:-10px;
-}
-#footer ul.social li a,
-#footer ul.quick-links li a{
-	color:#ffffff;
-}
-#footer ul.social li a:hover{
-	color:#eeeeee;
-}
-#footer ul.quick-links li{
-	padding: 3px 0;
-	-webkit-transition: .5s all ease;
-	-moz-transition: .5s all ease;
-	transition: .5s all ease;
-}
-#footer ul.quick-links li:hover{
-	padding: 3px 0;
-	margin-left:5px;
-	font-weight:700;
-}
-#footer ul.quick-links li a i{
-	margin-right: 5px;
-}
-#footer ul.quick-links li:hover a i {
-	font-weight: 700;
-}
-
-@media (max-width:767px){
-	#footer h5 {
-		padding-left: 0;
-		border-left: transparent;
-		padding-bottom: 0px;
-		margin-bottom: 10px;
 	}
 }
