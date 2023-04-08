@@ -19,9 +19,9 @@ $has_sidebar_3 = is_active_sidebar('sidebar-3');
 if ( $has_footer_menu || $has_social_menu || $has_sidebar_1 || $has_sidebar_2 ) {
 	?>
 
-<!--	<div class="footer-nav-widgets-wrapper header-footer-group">-->
-<!---->
-<!--		<div class="footer-inner section-inner">-->
+	<div class="footer-nav-widgets-wrapper header-footer-group">
+
+		<div class="footer-inner section-inner">
 
 			<?php
 
@@ -87,52 +87,44 @@ if ( $has_footer_menu || $has_social_menu || $has_sidebar_1 || $has_sidebar_2 ) 
 
 			<?php if ( $has_sidebar_1 || $has_sidebar_2 || $has_sidebar_3) { ?>
 
-<!--				<aside class="footer-widgets-outer-wrapper">-->
-<!---->
-<!--					<div class="footer-widgets-wrapper">-->
-            <section id="footer">
-                <div class="container">
-                    <div class="row text-center text-xs-center text-sm-left text-md-left">
+				<aside class="footer-widgets-outer-wrapper">
+
+					<div class="footer-widgets-wrapper">
 
 						<?php if ( $has_sidebar_1 ) { ?>
-<!---->
-<!--							<div class="footer-widgets column-one grid-item">-->
-                        <div class="col-xs-12 col-sm-4 col-md-4">
+
+							<div class="footer-widgets column-one grid-item">
                             <?php dynamic_sidebar( 'sidebar-3' ); ?>
-                        </div>
-<!--							</div>-->
-<!---->
+							</div>
+
 						<?php } ?>
-<!---->
+
 						<?php if ( $has_sidebar_2 ) { ?>
-<!---->
-<!--							<div class="footer-widgets column-two grid-item">-->
-                        <div class="col-xs-12 col-sm-4 col-md-4">
+
+							<div class="footer-widgets column-two grid-item">
                             <?php dynamic_sidebar( 'sidebar-3' ); ?>
-                        </div>
-<!--							</div>-->
-<!---->
+							</div>
+
 						<?php } ?>
 
                         <?php if ( $has_sidebar_3 ) { ?>
 
-<!--                            <div class="footer-widgets column-two grid-item"> -->
-                        <div class="col-xs-12 col-sm-4 col-md-4">
+                            <div class="footer-widgets column-two grid-item">
                                 <?php dynamic_sidebar( 'sidebar-3' ); ?>
-                        </div>
-<!--                            </div> -->
+                            </div>
 
                         <?php } ?>
                     </div>
-<!--					</div> --> <!-- .footer-widgets-wrapper-->
 
-<!--				</aside> --> <!-- .footer-widgets-outer-wrapper -->
+					</div> <!-- .footer-widgets-wrapper-->
+
+				</aside> <!-- .footer-widgets-outer-wrapper -->
 
 			<?php } ?>
 
-<!--		</div> --><!-- .footer-inner -->
+		</div><!-- .footer-inner -->
 
-<!--	</div> --><!-- .footer-nav-widgets-wrapper -->
+</div> <!-- .footer-nav-widgets-wrapper -->
 
 	<?php
 }
